@@ -10,7 +10,7 @@ export default function SideBar({ hideMenu, setHideMenu }: ISideBarProps) {
   const navLinks = [
     {
       name: 'Clube',
-      route: '/',
+      route: '/clube',
     },
     {
       name: 'Loja',
@@ -32,10 +32,9 @@ export default function SideBar({ hideMenu, setHideMenu }: ISideBarProps) {
 
   return (
     <WrapSideBar hideMenu={hideMenu}>
+      <Shadow hidden={hideMenu} />
       <WrapCloseMenu>
-        <button type="button" onClick={() => setHideMenu(true)}>
-          X
-        </button>
+        <button onClick={() => setHideMenu(true)}>X</button>
       </WrapCloseMenu>
 
       <WrapProfile>
@@ -44,7 +43,7 @@ export default function SideBar({ hideMenu, setHideMenu }: ISideBarProps) {
         </div>
         <div>
           <span>Acesse sua conta</span>
-          <button type="button">
+          <button>
             ENTRAR <BsArrowRight />
           </button>
         </div>
@@ -54,8 +53,10 @@ export default function SideBar({ hideMenu, setHideMenu }: ISideBarProps) {
         {navLinks.map((navLink) => (
           <NavLink
             key={navLink.route}
-            type="button"
-            onClick={() => router.push(navLink.route)}
+            onClick={() => {
+              setHideMenu(true);
+              router.push(navLink.route);
+            }}
             active={router.pathname === navLink.route}
           >
             {navLink.name}
@@ -65,6 +66,16 @@ export default function SideBar({ hideMenu, setHideMenu }: ISideBarProps) {
     </WrapSideBar>
   );
 }
+
+const Shadow = styled.div`
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.5);
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+  left: 0;
+  z-index: -1;
+`;
 
 const WrapSideBar = styled.div<IStyleProps>`
   height: 100vh;
@@ -81,6 +92,7 @@ const WrapSideBar = styled.div<IStyleProps>`
 const WrapCloseMenu = styled.div`
   display: flex;
   justify-content: flex-end;
+  background-color: inherit;
 
   button {
     background: none;
@@ -93,7 +105,8 @@ const WrapCloseMenu = styled.div`
 const WrapProfile = styled.div`
   display: flex;
   align-items: center;
-  margin: 10px 10px;
+  padding: 10px 10px;
+  background-color: inherit;
 
   div:nth-child(1) {
     width: 30%;

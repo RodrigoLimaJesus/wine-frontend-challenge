@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import styled from 'styled-components';
@@ -6,6 +7,7 @@ import SideBar from './components/sideBar';
 
 export default function Header() {
   const [hideMenu, setHideMenu] = useState(true);
+  const router = useRouter();
 
   return (
     <HeaderComponent>
@@ -14,7 +16,7 @@ export default function Header() {
           <GiHamburgerMenu />
         </Button>
 
-        <WrapLogo>
+        <WrapLogo onClick={() => router.push('/')}>
           <OwnImage src="/wine-logo.svg" alt="Logo empresa Wine" />
         </WrapLogo>
       </Wrap>
@@ -63,7 +65,7 @@ const Wrap = styled.div`
   justify-content: center;
 `;
 
-const WrapLogo = styled.div`
+const WrapLogo = styled.button`
   width: 75px;
 `;
 
