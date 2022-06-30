@@ -1,9 +1,9 @@
 import Head from 'next/head';
-import ReactProps from '../../types/ReactProps';
-import Header from '../header';
 import styled from 'styled-components';
+import IReactProps from '../../interfaces/reactProps';
+import Header from '../header';
 
-export default function Layout({ children }: ReactProps) {
+export default function Layout({ children }: IReactProps) {
   return (
     <div>
       <Head>

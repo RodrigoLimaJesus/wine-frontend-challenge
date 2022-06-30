@@ -1,8 +1,8 @@
-import { GiHamburgerMenu } from 'react-icons/gi';
 import { useState } from 'react';
+import { GiHamburgerMenu } from 'react-icons/gi';
 import styled from 'styled-components';
 import OwnImage from '../ownImage';
-import IStyleProps from './interfaces/styleProps';
+import SideBar from './components/sideBar';
 
 export default function Header() {
   const [hideMenu, setHideMenu] = useState(true);
@@ -19,11 +19,7 @@ export default function Header() {
         </WrapLogo>
       </Wrap>
 
-      <NavBar hideMenu={hideMenu}>
-        <WrapCloseMenu>
-          <CloseMenuButton onClick={() => setHideMenu(true)}>X</CloseMenuButton>
-        </WrapCloseMenu>
-      </NavBar>
+      <SideBar hideMenu={hideMenu} setHideMenu={setHideMenu} />
 
       <Wrap>
         <Button>
@@ -56,8 +52,6 @@ const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: none;
-  border: none;
   margin-inline: 10px;
   font-size: 1.5rem;
   width: 30px;
@@ -71,28 +65,6 @@ const Wrap = styled.div`
 
 const WrapLogo = styled.div`
   width: 75px;
-`;
-
-const NavBar = styled.nav<IStyleProps>`
-  height: 100vh;
-  width: ${(props) => (props.hideMenu ? 0 : '60vw')};
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  left: 0;
-  transition: 0.5s;
-  overflow-x: hidden;
-  background-color: rgb(245, 245, 245);
-  box-shadow: rgba(0, 0, 0, 0.5) 50vw 0;
-`;
-
-const WrapCloseMenu = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const CloseMenuButton = styled(Button)`
-  margin: 10px;
 `;
 
 const CartButton = styled(Button)`
