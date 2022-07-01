@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import IProducts from '../../../../interfaces/products';
 import fetcher from '../../../../services/fetcher';
+import groupItems from '../../../../utils/groupItems';
 import mockProducts from '../../../../utils/mockProucts';
 
 export default async function GetAllProducts(
@@ -20,14 +21,15 @@ export default async function GetAllProducts(
       return lowerProduct.includes(lowerQuery);
     });
 
-    return res
-      .status(200)
-      .json({
-        ...allProducts,
-        totalPages: Math.ceil(filredItems.length / 10),
-        totalItems: filredItems.length,
-        items: filredItems,
-      });
+    const personalItems = groupItems(filredItems);
+
+    return res.status(200).json({
+      ...allProducts,
+      totalPages: personalItems.length,
+      totalItems: filredItems.length,
+      items: [],
+      personalItems,
+    });
   } catch (error) {
     console.log(error);
 

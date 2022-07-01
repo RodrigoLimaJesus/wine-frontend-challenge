@@ -326,10 +326,14 @@ const PaginationMobile = styled.div`
 `;
 
 const PaginationDesktop = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 25px;
+  display: none;
+
+  @media screen and (min-width: 790px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
+  }
 `;
 
 const PaginationButton = styled.button<IStyleProps>`

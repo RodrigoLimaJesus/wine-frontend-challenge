@@ -13,7 +13,7 @@ export default async function GetAllProducts(
       `https://wine-back-test.herokuapp.com/products?page=${page}&limit=10`,
     );
 
-    return res.status(200).json(allProducts);
+    return res.status(200).json({ ...allProducts, personalItems: [] });
   } catch (error) {
     console.log(error);
 

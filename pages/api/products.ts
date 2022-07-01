@@ -10,7 +10,7 @@ export default async function GetAllProducts(
   try {
     const allProducts = await fetcher('https://wine-back-test.herokuapp.com/products');
 
-    return res.status(200).json(allProducts);
+    return res.status(200).json({ ...allProducts, personalItems: [] });
   } catch (error) {
     console.log(error);
 

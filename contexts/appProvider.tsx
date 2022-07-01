@@ -6,7 +6,7 @@ import fetcher from '../services/fetcher';
 import { AppContext } from './appContenxt';
 
 export default function AppProvider({ children }: IReactProps) {
-  const [productsInfo, setProductsInfo] = useState<Partial<IProducts>>();
+  const [productsInfo, setProductsInfo] = useState<IProducts>({} as IProducts);
   const [searchType, setSearchType] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [isMobile, setIsMobile] = useState(false);
@@ -18,7 +18,7 @@ export default function AppProvider({ children }: IReactProps) {
     function updateProductsInfo(fetchProducts: IProducts) {
       if (isMobile) {
         setProductsInfo((prev) => {
-          const prevData = prev?.items || [];
+          const prevData = prev.items || [];
           return { ...fetchProducts, items: [...prevData, ...fetchProducts.items] };
         });
       } else {
@@ -39,6 +39,12 @@ export default function AppProvider({ children }: IReactProps) {
           const { minPrice, maxPrice } = priceRange;
           return fetcher(`/api/products/price/${minPrice}/${maxPrice}`);
         },
+        personalPage: () => {
+          setProductsInfo((prev) => ({
+            ...prev,
+            items: prev.personalItems[currentPage],
+          }));
+        },
       };
 
       const existentOption = searchOptions[searchType as keyof typeof searchOptions];
@@ -58,7 +64,11 @@ export default function AppProvider({ children }: IReactProps) {
   }, [canSearch, currentPage, isMobile, priceRange, searchInput, searchType]);
 
   function handlePagination(mobile: boolean, page: number = 1) {
-    setSearchType('page');
+    if (productsInfo?.personalItems && productsInfo?.personalItems?.length > 0) {
+      setSearchType('personalPage');
+    } else {
+      setSearchType('page');
+    }
 
     if (mobile) {
       setIsMobile(true);

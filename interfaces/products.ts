@@ -1,4 +1,4 @@
-type Item = {
+export interface Item {
   id: number;
   image: string;
   name: string;
@@ -15,12 +15,13 @@ type Item = {
   region: string;
   flag: string;
   sommelierComment: string;
-};
+}
 
 export default interface IProducts {
   page: number;
   totalPages: number;
   itemsPerPage: number;
   totalItems: number;
-  items: Item[];
+  items: Item[] | [];
+  personalItems: Item[][] | [];
 }
