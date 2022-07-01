@@ -3,9 +3,11 @@ import { useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import styled from 'styled-components';
 import OwnImage from '../ownImage';
+import SearchBar from './components/searchBar';
 import SideBar from './components/sideBar';
 
 export default function Header() {
+  const [hideSearch, setHideSearch] = useState(true);
   const [hideMenu, setHideMenu] = useState(true);
   const router = useRouter();
 
@@ -19,11 +21,11 @@ export default function Header() {
         <WrapLogo onClick={() => router.push('/')}>
           <OwnImage src="/wine-logo.svg" alt="Logo empresa Wine" />
         </WrapLogo>
-        <SideBar hideMenu={hideMenu} setHideMenu={setHideMenu} />
+        <SideBar isHidden={hideMenu} setIsHidden={setHideMenu} />
       </Wrap>
 
       <Wrap>
-        <Button>
+        <Button onClick={() => setHideSearch((prev) => !prev)}>
           <OwnImage
             src="/busca.svg"
             alt="Ícone de lupa para busca de produtos por nome"
@@ -44,6 +46,8 @@ export default function Header() {
           />
         </CartButton>
       </Wrap>
+
+      <SearchBar isHidden={hideSearch} setIsHidden={setHideSearch} />
     </HeaderComponent>
   );
 }

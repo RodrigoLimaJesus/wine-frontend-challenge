@@ -1,11 +1,11 @@
 import { useRouter } from 'next/router';
 import { BsArrowRight } from 'react-icons/bs';
 import styled from 'styled-components';
+import ISideBarProps from '../../../interfaces/sideBarProps';
+import IStyleProps from '../../../interfaces/styleProps';
 import OwnImage from '../../ownImage';
-import ISideBarProps from '../interfaces/sideBarProps';
-import IStyleProps from '../interfaces/styleProps';
 
-export default function SideBar({ hideMenu, setHideMenu }: ISideBarProps) {
+export default function SideBar({ isHidden, setIsHidden }: ISideBarProps) {
   const router = useRouter();
   const navLinks = [
     {
@@ -31,10 +31,10 @@ export default function SideBar({ hideMenu, setHideMenu }: ISideBarProps) {
   ];
 
   return (
-    <WrapSideBar hideMenu={hideMenu}>
-      <Shadow hidden={hideMenu} />
+    <WrapSideBar isHidden={isHidden}>
+      <Shadow hidden={isHidden} />
       <WrapCloseMenu>
-        <button onClick={() => setHideMenu(true)}>X</button>
+        <button onClick={() => setIsHidden(true)}>X</button>
       </WrapCloseMenu>
 
       <WrapProfile>
@@ -54,7 +54,7 @@ export default function SideBar({ hideMenu, setHideMenu }: ISideBarProps) {
           <NavLink
             key={navLink.route}
             onClick={() => {
-              setHideMenu(true);
+              setIsHidden(true);
               router.push(navLink.route);
             }}
             active={router.pathname === navLink.route}
@@ -83,7 +83,7 @@ const Shadow = styled.div`
 
 const WrapSideBar = styled.div<IStyleProps>`
   height: 100vh;
-  width: ${(props) => (props.hideMenu ? 0 : '70vw')};
+  width: ${(props) => (props.isHidden ? 0 : '70vw')};
   position: fixed;
   z-index: 1;
   top: 0;
@@ -93,7 +93,7 @@ const WrapSideBar = styled.div<IStyleProps>`
   background-color: rgb(255, 255, 255);
 
   @media screen and (min-width: 620px) {
-    width: ${(props) => (props.hideMenu ? 0 : '50vw')};
+    width: ${(props) => (props.isHidden ? 0 : '50vw')};
   }
 
   @media screen and (min-width: 790px) {
