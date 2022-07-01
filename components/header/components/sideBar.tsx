@@ -75,6 +75,10 @@ const Shadow = styled.div`
   top: 0;
   left: 0;
   z-index: -1;
+
+  @media screen and (min-width: 790px) {
+    display: none;
+  }
 `;
 
 const WrapSideBar = styled.div<IStyleProps>`
@@ -87,6 +91,17 @@ const WrapSideBar = styled.div<IStyleProps>`
   transition: 0.5s;
   overflow-x: hidden;
   background-color: rgb(255, 255, 255);
+
+  @media screen and (min-width: 620px) {
+    width: ${(props) => (props.hideMenu ? 0 : '50vw')};
+  }
+
+  @media screen and (min-width: 790px) {
+    width: fit-content;
+    height: fit-content;
+    position: static;
+    z-index: initial;
+  }
 `;
 
 const WrapCloseMenu = styled.div`
@@ -100,6 +115,10 @@ const WrapCloseMenu = styled.div`
     font-size: 1.5rem;
     margin: 10px;
   }
+
+  @media screen and (min-width: 790px) {
+    display: none;
+  }
 `;
 
 const WrapProfile = styled.div`
@@ -109,7 +128,7 @@ const WrapProfile = styled.div`
   background-color: inherit;
 
   div:nth-child(1) {
-    width: 30%;
+    width: 100px;
     display: flex;
   }
 
@@ -127,14 +146,24 @@ const WrapProfile = styled.div`
       align-items: center;
     }
   }
+
+  @media screen and (min-width: 790px) {
+    display: none;
+  }
 `;
 
 const NavBar = styled.nav`
   background-color: rgb(245, 245, 245);
   height: 100%;
   display: flex;
+  padding: 10px;
   flex-direction: column;
   align-items: flex-start;
+
+  @media screen and (min-width: 790px) {
+    background: none;
+    flex-direction: row;
+  }
 `;
 
 const NavLink = styled.button<IStyleProps>`
@@ -142,4 +171,14 @@ const NavLink = styled.button<IStyleProps>`
   margin: 10px;
   font-weight: 700;
   font-size: 1.2rem;
+  transition: 0.4s;
+
+  @media screen and (min-width: 790px) {
+    color: ${(props) => (props.active ? 'rgb(184, 67, 110)' : 'rgb(100, 100, 100)')};
+    height: 100%;
+    :hover {
+      color: rgb(184, 67, 110);
+      border-bottom: solid 1px rgb(184, 67, 110);
+    }
+  }
 `;

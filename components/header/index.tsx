@@ -12,16 +12,15 @@ export default function Header() {
   return (
     <HeaderComponent>
       <Wrap>
-        <Button onClick={() => setHideMenu(false)}>
+        <MenuButton onClick={() => setHideMenu(false)}>
           <GiHamburgerMenu />
-        </Button>
+        </MenuButton>
 
         <WrapLogo onClick={() => router.push('/')}>
           <OwnImage src="/wine-logo.svg" alt="Logo empresa Wine" />
         </WrapLogo>
+        <SideBar hideMenu={hideMenu} setHideMenu={setHideMenu} />
       </Wrap>
-
-      <SideBar hideMenu={hideMenu} setHideMenu={setHideMenu} />
 
       <Wrap>
         <Button>
@@ -30,6 +29,13 @@ export default function Header() {
             alt="Ícone de lupa para busca de produtos por nome"
           />
         </Button>
+
+        <ProfileButton>
+          <OwnImage
+            src="/conta.svg"
+            alt="Ícone de lupa para busca de produtos por nome"
+          />
+        </ProfileButton>
 
         <CartButton>
           <OwnImage
@@ -48,6 +54,14 @@ const HeaderComponent = styled.header`
   align-items: center;
   border-bottom: solid 3px rgba(80, 80, 80, 0.5);
   background-color: rgb(255, 255, 255);
+
+  @media screen and (min-width: 790px) {
+    padding-inline: 15px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    padding-inline: 20px;
+  }
 `;
 
 const Button = styled.button`
@@ -56,7 +70,7 @@ const Button = styled.button`
   justify-content: center;
   margin-inline: 10px;
   font-size: 1.5rem;
-  width: 30px;
+  width: 45px;
 `;
 
 const Wrap = styled.div`
@@ -67,6 +81,24 @@ const Wrap = styled.div`
 
 const WrapLogo = styled.button`
   width: 75px;
+
+  @media screen and (min-width: 790px) {
+    width: 85px;
+    margin-right: 10px;
+  }
+
+  @media screen and (min-width: 1024px) {
+    width: 95px;
+    margin-right: 15px;
+  }
+`;
+
+const ProfileButton = styled(Button)`
+  display: none;
+
+  @media screen and (min-width: 790px) {
+    display: inherit;
+  }
 `;
 
 const CartButton = styled(Button)`
@@ -75,4 +107,10 @@ const CartButton = styled(Button)`
   border-radius: 100%;
   padding: 2px;
   overflow: hidden;
+`;
+
+const MenuButton = styled(Button)`
+  @media screen and (min-width: 790px) {
+    display: none;
+  }
 `;

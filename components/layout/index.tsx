@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import styled from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import IReactProps from '../../interfaces/reactProps';
 import Header from '../header';
 
@@ -14,6 +14,7 @@ export default function Layout({ children }: IReactProps) {
         />
         <link rel="icon" href="/wine-bag.svg" />
       </Head>
+      <GlobalStyle />
       <Header />
       <Main>{children}</Main>
     </div>
@@ -22,4 +23,21 @@ export default function Layout({ children }: IReactProps) {
 
 const Main = styled.main`
   background-color: rgb(245, 245, 245);
+`;
+
+const GlobalStyle = createGlobalStyle`
+  * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  border: none;
+  background: none;
+  }
+
+  @media screen and (min-width: 790px) {
+    button:hover {
+      cursor: pointer;
+    }
+  }
 `;
