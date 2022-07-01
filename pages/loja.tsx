@@ -7,23 +7,22 @@ import IProducts from '../interfaces/products';
 import fetcher from '../services/fetcher';
 
 const Shop: NextPage = () => {
-  const [isMounted, setIsMounted] = useState(false);
+  const [canFetch, setCanFetch] = useState(true);
   const [productsInfo, setProductsInfo] = useState<Partial<IProducts>>();
   const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     async function getProucts() {
-      const fetchProducts: IProducts = await fetcher(
-        `https://wine-back-test.herokuapp.com/products?page=${currentPage}&limit=10`,
-      );
+      const fetchProducts: IProducts = await fetcher(`/api/products/page/${currentPage}`);
 
       setProductsInfo(fetchProducts);
-      setIsMounted(true);
+      setCanFetch(false);
     }
-    if (!isMounted) {
+
+    if (canFetch) {
       getProucts();
     }
-  }, [isMounted, currentPage]);
+  }, [canFetch, currentPage]);
 
   return (
     <Layout>
@@ -160,6 +159,45 @@ const ProductCard = styled.div`
     text-align: center;
     font-size: 0.7rem;
     margin-block: 5px;
+  }
+
+  @media screen and (min-width: 680px) {
+    width: 30%;
+  }
+
+  @media screen and (min-width: 1024px) {
+    width: 26%;
+    margin: 15px;
+
+    h4 {
+      font-size: 1rem;
+    }
+
+    div:nth-of-type(2) {
+      font-size: 1rem;
+
+      span:nth-of-type(2) {
+        font-size: 1.1rem;
+      }
+    }
+
+    div:nth-of-type(3) {
+      span:nth-of-type(1) {
+        font-size: 0.8rem;
+      }
+
+      span:nth-of-type(2) {
+        font-size: 0.9rem;
+
+        span {
+          font-size: 1.4rem;
+        }
+      }
+    }
+
+    span:nth-child(5) {
+      font-size: 0.8rem;
+    }
   }
 `;
 
