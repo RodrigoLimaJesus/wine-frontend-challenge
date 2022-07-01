@@ -1,46 +1,28 @@
 import type { NextPage } from 'next';
-import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout';
 import OwnImage from '../components/ownImage';
-import IProducts from '../interfaces/products';
-import fetcher from '../services/fetcher';
+import { useAppContext } from '../contexts/appContenxt';
 
 const Shop: NextPage = () => {
-  const [isMounted, setIsMounted] = useState(false);
-  const [productsInfo, setProductsInfo] = useState<Partial<IProducts>>();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [canPaginate, setCanPaginate] = useState(false);
+  const { productsInfo, handleMobilePagination, currentPage, canSearch } =
+    useAppContext();
 
-  useEffect(() => {
-    async function initialFetch() {
-      const fetchProducts: IProducts = await fetcher('/api/products/page/1');
+  // useEffect(() => {
+  //   async function handleMobilePagination() {
+  //     if (handleProductsInfo) {
+  //       const fetchProducts: IProducts = await fetcher(
+  //         `/api/products/page/${currentPage}`,
+  //       );
+  //       handleProductsInfo(fetchProducts, true);
+  //     }
+  //     setCanPaginate(false);
+  //   }
 
-      setProductsInfo(fetchProducts);
-      setIsMounted(true);
-    }
-
-    if (!isMounted) {
-      initialFetch();
-    }
-  }, [isMounted]);
-
-  useEffect(() => {
-    async function handlePagination() {
-      const fetchProducts: IProducts = await fetcher(`/api/products/page/${currentPage}`);
-
-      setProductsInfo((prev) => {
-        const prevItems = prev?.items || [];
-
-        return { ...fetchProducts, items: [...prevItems, ...fetchProducts.items] };
-      });
-      setCanPaginate(false);
-    }
-
-    if (canPaginate) {
-      handlePagination();
-    }
-  }, [canPaginate, currentPage]);
+  //   if (canPaginate && handleMobilePagination) {
+  //     handleMobilePagination();
+  //   }
+  // }, [canPaginate, currentPage, handleProductsInfo]);
 
   return (
     <Layout>
@@ -79,11 +61,12 @@ const Shop: NextPage = () => {
 
       <PaginationContainer>
         <button
-          disabled={currentPage === productsInfo?.totalPages || canPaginate}
+          name="mobile-pagination"
+          disabled={currentPage === productsInfo?.totalPages}
           onClick={() => {
-            setCanPaginate(true);
-            setCurrentPage((prev) => prev + 1);
-            setIsMounted(true);
+            if (handleMobilePagination) {
+              handleMobilePagination();
+            }
           }}
         >
           Mostrar mais
@@ -249,6 +232,13 @@ const ProductButton = styled.button`
   padding: 8px;
   margin-block: 10px;
   border-radius: 5px;
+  transition: 0.4s;
+
+  @media screen and (min-width: 790px) {
+    :hover {
+      background-color: rgb(101, 148, 57);
+    }
+  }
 `;
 
 const PaginationContainer = styled.div`
@@ -267,6 +257,11 @@ const PaginationContainer = styled.div`
     font-weight: 700;
     padding: 10px;
     margin-bottom: 10px;
+  }
+
+  button:disabled {
+    color: rgba(160, 65, 100, 0.7);
+    border: 2px solid;
   }
 
   div > span {
