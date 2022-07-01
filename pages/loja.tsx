@@ -7,22 +7,40 @@ import IProducts from '../interfaces/products';
 import fetcher from '../services/fetcher';
 
 const Shop: NextPage = () => {
-  const [canFetch, setCanFetch] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
   const [productsInfo, setProductsInfo] = useState<Partial<IProducts>>();
   const [currentPage, setCurrentPage] = useState(1);
+  const [canPaginate, setCanPaginate] = useState(false);
 
   useEffect(() => {
-    async function getProucts() {
-      const fetchProducts: IProducts = await fetcher(`/api/products/page/${currentPage}`);
+    async function initialFetch() {
+      const fetchProducts: IProducts = await fetcher('/api/products/page/1');
 
       setProductsInfo(fetchProducts);
-      setCanFetch(false);
+      setIsMounted(true);
     }
 
-    if (canFetch) {
-      getProucts();
+    if (!isMounted) {
+      initialFetch();
     }
-  }, [canFetch, currentPage]);
+  }, [isMounted]);
+
+  useEffect(() => {
+    async function handlePagination() {
+      const fetchProducts: IProducts = await fetcher(`/api/products/page/${currentPage}`);
+
+      setProductsInfo((prev) => {
+        const prevItems = prev?.items || [];
+
+        return { ...fetchProducts, items: [...prevItems, ...fetchProducts.items] };
+      });
+      setCanPaginate(false);
+    }
+
+    if (canPaginate) {
+      handlePagination();
+    }
+  }, [canPaginate, currentPage]);
 
   return (
     <Layout>
@@ -58,6 +76,27 @@ const Shop: NextPage = () => {
           </ProductCard>
         ))}
       </ProductsList>
+
+      <PaginationContainer>
+        <button
+          disabled={currentPage === productsInfo?.totalPages || canPaginate}
+          onClick={() => {
+            setCanPaginate(true);
+            setCurrentPage((prev) => prev + 1);
+            setIsMounted(true);
+          }}
+        >
+          Mostrar mais
+        </button>
+
+        <div>
+          <span>
+            Exibindo <span>{productsInfo?.items?.length}</span> de
+            <span> {productsInfo?.totalItems} </span>
+            produtos no total
+          </span>
+        </div>
+      </PaginationContainer>
     </Layout>
   );
 };
@@ -210,4 +249,32 @@ const ProductButton = styled.button`
   padding: 8px;
   margin-block: 10px;
   border-radius: 5px;
+`;
+
+const PaginationContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+
+  button {
+    color: rgb(184, 67, 110);
+    border: 2px solid rgb(184, 67, 110);
+    border-radius: 10px;
+    width: 50%;
+    font-size: 1.4rem;
+    font-weight: 700;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+
+  div > span {
+    color: rgb(80, 80, 80);
+  }
+
+  div span span {
+    color: black;
+    font-weight: 700;
+  }
 `;
