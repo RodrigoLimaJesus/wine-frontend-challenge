@@ -3,26 +3,11 @@ import styled from 'styled-components';
 import Layout from '../components/layout';
 import OwnImage from '../components/ownImage';
 import { useAppContext } from '../contexts/appContenxt';
+import IStyleProps from '../interfaces/styleProps';
 
 const Shop: NextPage = () => {
-  const { productsInfo, handleMobilePagination, currentPage, canSearch } =
-    useAppContext();
-
-  // useEffect(() => {
-  //   async function handleMobilePagination() {
-  //     if (handleProductsInfo) {
-  //       const fetchProducts: IProducts = await fetcher(
-  //         `/api/products/page/${currentPage}`,
-  //       );
-  //       handleProductsInfo(fetchProducts, true);
-  //     }
-  //     setCanPaginate(false);
-  //   }
-
-  //   if (canPaginate && handleMobilePagination) {
-  //     handleMobilePagination();
-  //   }
-  // }, [canPaginate, currentPage, handleProductsInfo]);
+  const { productsInfo, handlePagination, currentPage } = useAppContext();
+  const numberCurrPage = Number(currentPage);
 
   return (
     <Layout>
@@ -59,13 +44,12 @@ const Shop: NextPage = () => {
         ))}
       </ProductsList>
 
-      <PaginationContainer>
+      <PaginationMobile>
         <button
-          name="mobile-pagination"
           disabled={currentPage === productsInfo?.totalPages}
           onClick={() => {
-            if (handleMobilePagination) {
-              handleMobilePagination();
+            if (handlePagination) {
+              handlePagination(true);
             }
           }}
         >
@@ -79,7 +63,70 @@ const Shop: NextPage = () => {
             produtos no total
           </span>
         </div>
-      </PaginationContainer>
+      </PaginationMobile>
+
+      <PaginationDesktop>
+        {numberCurrPage - 1 > 0 && (
+          <>
+            <PaginationText
+              active={false}
+              onClick={() => {
+                if (handlePagination) {
+                  handlePagination(false, numberCurrPage - 1);
+                }
+              }}
+            >
+              {'<<'} Anterior
+            </PaginationText>
+            <PaginationButton
+              active={false}
+              onClick={() => {
+                if (handlePagination) {
+                  handlePagination(false, numberCurrPage - 1);
+                }
+              }}
+            >
+              {numberCurrPage - 1}
+            </PaginationButton>
+          </>
+        )}
+
+        <PaginationButton
+          active
+          onClick={() => {
+            if (handlePagination) {
+              handlePagination(false, numberCurrPage);
+            }
+          }}
+        >
+          {numberCurrPage}
+        </PaginationButton>
+
+        {productsInfo?.totalPages && numberCurrPage + 1 <= productsInfo?.totalPages && (
+          <>
+            <PaginationButton
+              active={false}
+              onClick={() => {
+                if (handlePagination) {
+                  handlePagination(false, numberCurrPage + 1);
+                }
+              }}
+            >
+              {numberCurrPage + 1}
+            </PaginationButton>
+            <PaginationText
+              active={false}
+              onClick={() => {
+                if (handlePagination) {
+                  handlePagination(false, numberCurrPage + 1);
+                }
+              }}
+            >
+              Próximo {'>>'}
+            </PaginationText>
+          </>
+        )}
+      </PaginationDesktop>
     </Layout>
   );
 };
@@ -241,7 +288,7 @@ const ProductButton = styled.button`
   }
 `;
 
-const PaginationContainer = styled.div`
+const PaginationMobile = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -272,4 +319,30 @@ const PaginationContainer = styled.div`
     color: black;
     font-weight: 700;
   }
+
+  @media screen and (min-width: 790px) {
+    display: none;
+  }
+`;
+
+const PaginationDesktop = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 25px;
+`;
+
+const PaginationButton = styled.button<IStyleProps>`
+  font-size: 1.4rem;
+  margin-inline: 5px;
+  padding: 10px;
+  border: 1px solid rgb(184, 67, 110);
+  border-radius: 10px;
+  color: ${(props) => (props.active ? 'rgb(245,245,245)' : 'rgb(184, 67, 110)')};
+  background-color: ${(props) => (props.active ? 'rgb(184, 67, 110)' : 'transparent')};
+`;
+
+const PaginationText = styled(PaginationButton)`
+  border: none;
+  font-size: 1.2rem;
 `;
