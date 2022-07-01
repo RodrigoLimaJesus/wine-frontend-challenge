@@ -18,9 +18,12 @@ export default async function GetAllProducts(
         priceMember >= Number(minPrice) && priceMember <= Number(maxPrice),
     );
 
-    return res
-      .status(200)
-      .json({ ...allProducts, totalItems: filredItems.length, items: filredItems });
+    return res.status(200).json({
+      ...allProducts,
+      totalPages: Math.ceil(filredItems.length / 10),
+      totalItems: filredItems.length,
+      items: filredItems,
+    });
   } catch (error) {
     console.log(error);
 

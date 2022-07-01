@@ -22,7 +22,12 @@ export default async function GetAllProducts(
 
     return res
       .status(200)
-      .json({ ...allProducts, totalItems: filredItems.length, items: filredItems });
+      .json({
+        ...allProducts,
+        totalPages: Math.ceil(filredItems.length / 10),
+        totalItems: filredItems.length,
+        items: filredItems,
+      });
   } catch (error) {
     console.log(error);
 
