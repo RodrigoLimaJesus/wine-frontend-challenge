@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import ISideBarProps from '../../../interfaces/sideBarProps';
 import IStyleProps from '../../../interfaces/styleProps';
 
-export default function SearchBar({ isHidden, setIsHidden }: ISideBarProps) {
+export default function SearchBar({ isHidden }: Partial<ISideBarProps>) {
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
   }
@@ -13,7 +13,7 @@ export default function SearchBar({ isHidden, setIsHidden }: ISideBarProps) {
     <SearchBarComponent hidden={isHidden} onSubmit={handleSubmit}>
       <input type="text" placeholder="Pesquisar" />
 
-      <button type="submit" onClick={() => setIsHidden(true)}>
+      <button type="submit">
         <AiOutlineSearch />
       </button>
     </SearchBarComponent>
@@ -25,12 +25,13 @@ const SearchBarComponent = styled.form<IStyleProps>`
   visibility: ${(props) => (props.hidden ? 'hidden' : 'visible')};
   justify-content: space-between;
   align-items: center;
-  position: absolute;
+  position: fixed;
   background-color: rgb(245, 245, 245);
   width: 100vw;
   top: 80px;
   right: 0;
   padding: 15px;
+  z-index: 1;
 
   input {
     background-color: rgb(255, 255, 255);

@@ -1,8 +1,175 @@
 import type { NextPage } from 'next';
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import Layout from '../components/layout';
+import OwnImage from '../components/ownImage';
+import IProducts from '../interfaces/products';
+import fetcher from '../services/fetcher';
 
-const Shopp: NextPage = () => {
-  return <Layout></Layout>;
+const Shop: NextPage = () => {
+  const [isMounted, setIsMounted] = useState(false);
+  const [productsInfo, setProductsInfo] = useState<Partial<IProducts>>();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+    async function getProucts() {
+      const fetchProducts: IProducts = await fetcher(
+        `https://wine-back-test.herokuapp.com/products?page=${currentPage}&limit=10`,
+      );
+
+      setProductsInfo(fetchProducts);
+      setIsMounted(true);
+    }
+    if (!isMounted) {
+      getProucts();
+    }
+  }, [isMounted, currentPage]);
+
+  return (
+    <Layout>
+      <CountProducts>
+        <span>{productsInfo?.totalItems} </span>
+        <span>produtos encontrados</span>
+      </CountProducts>
+
+      <ProductsList>
+        {productsInfo?.items?.map((product) => (
+          <ProductCard key={product.id}>
+            <div>
+              <OwnImage src={product.image} alt={product.name} />
+            </div>
+
+            <h4>{product.name}</h4>
+
+            <div>
+              <span>{product.price} </span>
+              <span>{product.discount}% OFF</span>
+            </div>
+
+            <div>
+              <span>SÓCIO WINE</span>
+              <span>
+                R$ <span>{product.priceMember}</span>
+              </span>
+            </div>
+
+            <span>NÃO SÓCIO R${product.priceNonMember}</span>
+
+            <ProductButton>Adicionar</ProductButton>
+          </ProductCard>
+        ))}
+      </ProductsList>
+    </Layout>
+  );
 };
 
-export default Shopp;
+export default Shop;
+
+const CountProducts = styled.div`
+  padding-block: 15px;
+  border-bottom: 1px solid rgb(180, 180, 180);
+
+  span:nth-child(1) {
+    font-weight: 700;
+  }
+
+  span:nth-child(2) {
+    color: rgb(80, 80, 80);
+  }
+`;
+
+const ProductsList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-block: 20px;
+  justify-content: space-between;
+`;
+
+const ProductCard = styled.div`
+  width: 45%;
+  margin: 5px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  box-shadow: rgba(0, 0, 0, 0.4) 1px 1px 10px;
+
+  div:nth-of-type(1) {
+    width: 100px;
+    height: 120px;
+  }
+
+  h4 {
+    text-align: center;
+    font-size: 0.9rem;
+  }
+
+  div:nth-of-type(2) {
+    margin-block: 8px;
+    font-size: 0.8rem;
+
+    span:nth-of-type(1) {
+      margin-right: 8px;
+      color: rgb(80, 80, 80);
+      text-decoration: line-through;
+    }
+
+    span:nth-of-type(2) {
+      background-color: rgb(245, 155, 93);
+      color: rgb(255, 255, 255);
+      border-radius: 5px;
+      padding: 5px;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+  }
+
+  div:nth-of-type(3) {
+    display: flex;
+    justify-content: space-between;
+    margin-block: 5px;
+
+    span:nth-of-type(1) {
+      display: block;
+      text-align: center;
+      width: 40%;
+      color: rgb(80, 80, 80);
+      font-size: 0.7rem;
+    }
+
+    span:nth-of-type(2) {
+      display: flex;
+      align-items: baseline;
+      color: rgb(184, 67, 110);
+      font-size: 0.7rem;
+      font-weight: 700;
+
+      span {
+        color: inherit;
+        font-size: 1.2rem;
+        margin-left: 5px;
+      }
+    }
+  }
+
+  span:nth-child(5) {
+    color: rgb(80, 80, 80);
+    display: block;
+    text-align: center;
+    font-size: 0.7rem;
+    margin-block: 5px;
+  }
+`;
+
+const ProductButton = styled.button`
+  background-color: rgb(126, 188, 67);
+  color: rgb(245, 245, 245);
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 8px;
+  margin-block: 10px;
+  border-radius: 5px;
+`;
