@@ -16,13 +16,21 @@ export default function AppProvider({ children }: IReactProps) {
 
   useEffect(() => {
     function updateProductsInfo(fetchProducts: IProducts) {
-      if (isMobile) {
-        setProductsInfo((prev) => {
-          const prevData = prev.items || [];
-          return { ...fetchProducts, items: [...prevData, ...fetchProducts.items] };
+      const { personalItems } = fetchProducts;
+      if (personalItems && personalItems.length > 0) {
+        setProductsInfo({
+          ...fetchProducts,
+          items: [...personalItems[0]],
         });
       } else {
-        setProductsInfo(fetchProducts);
+        if (isMobile) {
+          setProductsInfo((prev) => {
+            const prevData = prev.items || [];
+            return { ...fetchProducts, items: [...prevData, ...fetchProducts.items] };
+          });
+        } else {
+          setProductsInfo(fetchProducts);
+        }
       }
 
       setIsMobile(false);
@@ -33,24 +41,22 @@ export default function AppProvider({ children }: IReactProps) {
       let fetchProducts: IProducts;
 
       const searchOptions = {
-        page: async () => fetcher(`/api/products/page/${currentPage}`),
-        name: async () => fetcher(`/api/products/name/${searchInput}`),
+        page: async () => await fetcher(`/api/products/page/${currentPage}`),
+        name: async () => await fetcher(`/api/products/name/${searchInput}`),
         price: async () => {
           const { minPrice, maxPrice } = priceRange;
           return fetcher(`/api/products/price/${minPrice}/${maxPrice}`);
-        },
-        personalPage: () => {
-          setProductsInfo((prev) => ({
-            ...prev,
-            items: prev.personalItems[currentPage],
-          }));
         },
       };
 
       const existentOption = searchOptions[searchType as keyof typeof searchOptions];
 
       if (existentOption) {
-        fetchProducts = await existentOption();
+        try {
+          fetchProducts = await existentOption();
+        } catch (error) {
+          fetchProducts = await fetcher(`/api/products/page/1`);
+        }
       } else {
         fetchProducts = await fetcher(`/api/products/page/1`);
       }
@@ -64,26 +70,60 @@ export default function AppProvider({ children }: IReactProps) {
   }, [canSearch, currentPage, isMobile, priceRange, searchInput, searchType]);
 
   function handlePagination(mobile: boolean, page: number = 1) {
-    if (productsInfo?.personalItems && productsInfo?.personalItems?.length > 0) {
-      setSearchType('personalPage');
+    const { personalItems } = productsInfo;
+
+    if (personalItems && personalItems.length > 0) {
+      if (mobile) {
+        setProductsInfo((prev) => {
+          const prevData = prev.items || [];
+          return {
+            ...productsInfo,
+            items: [...prevData, ...prev.personalItems[page - 1]],
+          };
+        });
+        setCurrentPage((prev) => prev + 1);
+        return;
+      }
+
+      setProductsInfo((prev) => ({
+        ...prev,
+        items: prev.personalItems[page - 1],
+      }));
+
+      setCurrentPage(page);
     } else {
       setSearchType('page');
-    }
 
-    if (mobile) {
-      setIsMobile(true);
-      setCurrentPage((prev) => prev + 1);
+      if (mobile) {
+        setIsMobile(true);
+        setCurrentPage((prev) => prev + 1);
+        setCanSearch(true);
+        return;
+      }
+
+      setCurrentPage(page);
       setCanSearch(true);
-      return;
     }
+  }
 
-    setCurrentPage(page);
+  function handleSearchOptions(type: string) {
+    setCurrentPage(1);
+    setSearchType(type);
     setCanSearch(true);
   }
 
   return (
     <AppContext.Provider
-      value={{ productsInfo, handlePagination, canSearch, currentPage }}
+      value={{
+        productsInfo,
+        handlePagination,
+        canSearch,
+        setCanSearch,
+        handleSearchOptions,
+        currentPage,
+        searchInput,
+        setSearchInput,
+      }}
     >
       {children}
     </AppContext.Provider>

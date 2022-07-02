@@ -46,10 +46,10 @@ const Shop: NextPage = () => {
 
       <PaginationMobile>
         <button
-          disabled={currentPage === productsInfo?.totalPages}
+          disabled={currentPage >= Number(productsInfo?.totalPages)}
           onClick={() => {
             if (handlePagination) {
-              handlePagination(true);
+              handlePagination(true, currentPage + 1);
             }
           }}
         >
@@ -150,7 +150,7 @@ const ProductsList = styled.div`
   display: flex;
   flex-wrap: wrap;
   margin-block: 20px;
-  justify-content: space-between;
+  justify-content: space-evenly;
 `;
 
 const ProductCard = styled.div`

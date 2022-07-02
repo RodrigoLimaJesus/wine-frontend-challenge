@@ -1,17 +1,36 @@
-import { FormEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import styled from 'styled-components';
+import { useAppContext } from '../../../contexts/appContenxt';
 import ISideBarProps from '../../../interfaces/sideBarProps';
 import IStyleProps from '../../../interfaces/styleProps';
 
-export default function SearchBar({ isHidden }: Partial<ISideBarProps>) {
+export default function SearchBar({ isHidden, setIsHidden }: Partial<ISideBarProps>) {
+  const { searchInput, setSearchInput, handleSearchOptions } = useAppContext();
+
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
+    handleSearchOptions('name');
+
+    if (setIsHidden) {
+      setIsHidden(true);
+    }
+  }
+
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
+    const inputContent = e.target.value;
+    setSearchInput(inputContent);
   }
 
   return (
     <SearchBarComponent hidden={isHidden} onSubmit={handleSubmit}>
-      <input type="text" placeholder="Pesquisar" />
+      <input
+        type="text"
+        placeholder="Pesquisar"
+        value={searchInput}
+        onChange={handleInputChange}
+      />
 
       <button type="submit">
         <AiOutlineSearch />

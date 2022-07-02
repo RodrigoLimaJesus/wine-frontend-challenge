@@ -10,6 +10,7 @@ export default async function GetAllProducts(
 ) {
   try {
     const name = req.query.name as string;
+
     const allProducts: IProducts = await fetcher(
       'https://wine-back-test.herokuapp.com/products',
     );

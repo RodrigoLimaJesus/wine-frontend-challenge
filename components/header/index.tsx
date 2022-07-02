@@ -47,7 +47,7 @@ export default function Header() {
         </CartButton>
       </Wrap>
 
-      <SearchBar isHidden={hideSearch} />
+      <SearchBar isHidden={hideSearch} setIsHidden={setHideSearch} />
     </HeaderComponent>
   );
 }
