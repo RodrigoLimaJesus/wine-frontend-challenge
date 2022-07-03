@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import IPriceRange from '../interfaces/priceRange';
-import IProducts from '../interfaces/products';
+import IProducts, { Item } from '../interfaces/products';
 import IReactProps from '../interfaces/reactProps';
 import fetcher from '../services/fetcher';
 import { AppContext } from './appContenxt';
@@ -13,6 +13,9 @@ export default function AppProvider({ children }: IReactProps) {
   const [priceRange, setPriceRange] = useState<IPriceRange>({} as IPriceRange);
   const [currentPage, setCurrentPage] = useState(1);
   const [canSearch, setCanSearch] = useState(true);
+  const [isMounted, setIsMounted] = useState(false);
+  const [cartItems, setCartItems] = useState([] as Item[]);
+  const [countCartItems, setCountCartItems] = useState(0);
 
   useEffect(() => {
     function updateProductsInfo(fetchProducts: IProducts) {
@@ -130,6 +133,50 @@ export default function AppProvider({ children }: IReactProps) {
     setCanSearch(true);
   }
 
+  useEffect(() => {
+    if (!isMounted) {
+      const storageCartItems = localStorage.getItem('cartItems') || '[]';
+      setCartItems(JSON.parse(storageCartItems));
+      setIsMounted(true);
+    } else {
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+      const itemsInCart = cartItems.reduce(
+        (prev, curr) => prev + Number(curr.qtyInCart),
+        0,
+      );
+      setCountCartItems(itemsInCart);
+    }
+  }, [cartItems, isMounted]);
+
+  function handleCartItems(item: Item, quantity: number) {
+    const productInCart = cartItems.find(({ id }) => id === item.id);
+    let numberInCart = 0;
+
+    if (!productInCart) {
+      if (quantity > 0) {
+        setCartItems((prev) => [...prev, { ...item, qtyInCart: 1 }]);
+      }
+      return;
+    } else {
+      numberInCart = productInCart.qtyInCart || 0;
+    }
+
+    if (!numberInCart || numberInCart + quantity === 0) {
+      setCartItems((prev) => prev.filter(({ id }) => id !== item.id));
+      return;
+    }
+
+    setCartItems((prev) =>
+      prev.map((product) => {
+        if (item.id === product.id) {
+          return { ...item, qtyInCart: numberInCart + quantity };
+        }
+
+        return product;
+      }),
+    );
+  }
+
   return (
     <AppContext.Provider
       value={{
@@ -143,6 +190,8 @@ export default function AppProvider({ children }: IReactProps) {
         setSearchInput,
         priceRange,
         setPriceRange,
+        handleCartItems,
+        countCartItems,
       }}
     >
       {children}

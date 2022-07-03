@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import styled from 'styled-components';
 import OwnImage from '../ownImage';
+import CartButton from './components/cartButton';
 import SearchBar from './components/searchBar';
 import SideBar from './components/sideBar';
 
@@ -39,12 +40,7 @@ export default function Header() {
           />
         </ProfileButton>
 
-        <CartButton>
-          <OwnImage
-            src="/wine-bag.svg"
-            alt="Ícone de sacola wine para mostrar o carrinho de compras"
-          />
-        </CartButton>
+        <CartButton />
       </Wrap>
 
       <SearchBar isHidden={hideSearch} setIsHidden={setHideSearch} />
@@ -103,14 +99,6 @@ const ProfileButton = styled(Button)`
   @media screen and (min-width: 790px) {
     display: inherit;
   }
-`;
-
-const CartButton = styled(Button)`
-  width: 50px;
-  background-color: rgb(246, 181, 84);
-  border-radius: 100%;
-  padding: 2px;
-  overflow: hidden;
 `;
 
 const MenuButton = styled(Button)`

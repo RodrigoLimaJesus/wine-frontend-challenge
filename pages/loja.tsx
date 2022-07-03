@@ -14,7 +14,9 @@ const Shop: NextPage = () => {
     setPriceRange,
     handleSearchOptions,
     searchInput,
+    handleCartItems,
   } = useAppContext();
+
   const numberCurrPage = Number(currentPage);
   const priceFilters = [
     { id: useId(), label: 'Todos', min: 0, max: 0 },
@@ -85,7 +87,12 @@ const Shop: NextPage = () => {
 
                 <span>NÃO SÓCIO R${product.priceNonMember}</span>
 
-                <ProductButton>Adicionar</ProductButton>
+                <ProductButton onClick={() => handleCartItems(product, 1)}>
+                  Adicionar
+                </ProductButton>
+                <ProductButton onClick={() => handleCartItems(product, -1)}>
+                  Remover
+                </ProductButton>
               </ProductCard>
             ))}
           </ProductsList>
@@ -359,10 +366,8 @@ const ProductButton = styled.button`
   border-radius: 5px;
   transition: 0.4s;
 
-  @media screen and (min-width: 790px) {
-    :hover {
-      background-color: rgb(101, 148, 57);
-    }
+  :hover {
+    background-color: rgb(101, 148, 57);
   }
 `;
 

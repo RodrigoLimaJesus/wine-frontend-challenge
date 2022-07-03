@@ -15,6 +15,7 @@ export interface Item {
   region: string;
   flag: string;
   sommelierComment: string;
+  qtyInCart?: number;
 }
 
 export default interface IProducts {
