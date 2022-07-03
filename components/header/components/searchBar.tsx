@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent } from 'react';
 import { AiOutlineSearch } from 'react-icons/ai';
 import styled from 'styled-components';
@@ -8,6 +9,8 @@ import IStyleProps from '../../../interfaces/styleProps';
 export default function SearchBar({ isHidden, setIsHidden }: Partial<ISideBarProps>) {
   const { searchInput, setSearchInput, handleSearchOptions, priceRange } =
     useAppContext();
+
+  const router = useRouter();
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -24,8 +27,13 @@ export default function SearchBar({ isHidden, setIsHidden }: Partial<ISideBarPro
         handleSearchOptions('price');
       }
     }
+
     if (setIsHidden) {
       setIsHidden(true);
+    }
+
+    if (router.pathname !== '/loja') {
+      router.push('/loja');
     }
   }
 
