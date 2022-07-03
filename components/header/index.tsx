@@ -26,7 +26,10 @@ export default function Header() {
       </Wrap>
 
       <Wrap>
-        <Button onClick={() => setHideSearch((prev) => !prev)}>
+        <Button
+          data-testid="header-search-button"
+          onClick={() => setHideSearch((prev) => !prev)}
+        >
           <OwnImage
             src="/busca.svg"
             alt="Ícone de lupa para busca de produtos por nome"

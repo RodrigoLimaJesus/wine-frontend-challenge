@@ -5,7 +5,7 @@ import OwnImage from '../../ownImage';
 export default function CartButton() {
   const { countCartItems } = useAppContext();
   return (
-    <CartButtonComponent>
+    <CartButtonComponent data-testid="header-cart-button">
       <OwnImage
         src="/wine-bag.svg"
         alt="Ícone de sacola wine para mostrar o carrinho de compras"

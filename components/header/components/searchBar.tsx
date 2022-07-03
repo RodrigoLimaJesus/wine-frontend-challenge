@@ -52,9 +52,10 @@ export default function SearchBar({ isHidden, setIsHidden }: Partial<ISideBarPro
         placeholder="Pesquisar"
         value={searchInput}
         onChange={handleInputChange}
+        data-testid="search-input"
       />
 
-      <button type="submit">
+      <button type="submit" data-testid="search-input-submit">
         <AiOutlineSearch />
       </button>
     </SearchBarComponent>

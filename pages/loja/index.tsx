@@ -52,7 +52,7 @@ const Shop: NextPage = () => {
   return (
     <Layout>
       <CountProducts>
-        <span>{productsInfo?.totalItems} </span>
+        <span data-testid="found-items">{productsInfo?.totalItems || 0} </span>
         <span>produtos encontrados</span>
       </CountProducts>
       <MainContainer>
@@ -61,7 +61,7 @@ const Shop: NextPage = () => {
           <span>Por preço</span>
 
           {priceFilters.map(({ id, label, min, max }) => (
-            <label key={id}>
+            <label key={id} data-testid="price-filter-label">
               <input
                 type="radio"
                 name="price-filter"
@@ -74,7 +74,7 @@ const Shop: NextPage = () => {
         <div>
           <ProductsList>
             {productsInfo?.items?.map((product) => (
-              <ProductCard key={product.id}>
+              <ProductCard key={product.id} data-testid="product-card">
                 <div>
                   <OwnImage src={product.image} alt={product.name} />
                 </div>
@@ -141,6 +141,7 @@ const Shop: NextPage = () => {
                   {'<<'} Anterior
                 </PaginationText>
                 <PaginationButton
+                  data-testid="previous-page-btn"
                   active={false}
                   onClick={() => {
                     if (handlePagination) {
@@ -153,20 +154,14 @@ const Shop: NextPage = () => {
               </>
             )}
 
-            <PaginationButton
-              active
-              onClick={() => {
-                if (handlePagination) {
-                  handlePagination(false, numberCurrPage);
-                }
-              }}
-            >
+            <PaginationButton active data-testid="current-page-btn">
               {numberCurrPage}
             </PaginationButton>
 
             {productsInfo?.totalPages && numberCurrPage + 1 <= productsInfo?.totalPages && (
               <>
                 <PaginationButton
+                  data-testid="next-page-btn"
                   active={false}
                   onClick={() => {
                     if (handlePagination) {

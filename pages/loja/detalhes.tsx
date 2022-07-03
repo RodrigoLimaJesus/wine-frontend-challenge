@@ -147,13 +147,19 @@ const Details: NextPage = () => {
           </div>
 
           <div className="cart-button">
-            <button onClick={() => handleCartItems(productDetails, -1)}>
+            <button
+              data-testid="increment-cart-btn"
+              onClick={() => handleCartItems(productDetails, -1)}
+            >
               <AiOutlineMinusCircle />
             </button>
             <span>
               {cartItems.find(({ id }) => id === productDetails.id)?.qtyInCart || 0}
             </span>
-            <button onClick={() => handleCartItems(productDetails, 1)}>
+            <button
+              data-testid="decrement-cart-btn"
+              onClick={() => handleCartItems(productDetails, 1)}
+            >
               <AiOutlinePlusCircle />
             </button>
           </div>
