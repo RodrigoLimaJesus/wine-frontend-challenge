@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Layout from '../../components/layout';
 import OwnImage from '../../components/ownImage';
@@ -21,10 +22,20 @@ const Details: NextPage = () => {
     priceNonMember,
   } = productDetails;
 
+  const [adjustedImageURL, setAdjustedImageURL] = useState('');
   const router = useRouter();
-  const adjustedImageURL = image.replace('h=515', 'h=2048');
 
-  return (
+  useEffect(() => {
+    if (!productDetails.name) {
+      router.push('/loja');
+    } else {
+      setAdjustedImageURL(image.replace('h=515', 'h=2048'));
+    }
+  }, [productDetails, router, image]);
+
+  return !productDetails.name ? (
+    <div></div>
+  ) : (
     <Layout>
       <MobileContainer>
         <button type="button" onClick={() => router.back()}>
@@ -34,7 +45,7 @@ const Details: NextPage = () => {
 
         <div>
           <div>
-            <OwnImage src={flag} alt={`Bandeira de ${country}`} />
+            {adjustedImageURL && <OwnImage src={flag} alt={`Bandeira de ${country}`} />}
           </div>
 
           <span>{country}</span>
@@ -43,11 +54,13 @@ const Details: NextPage = () => {
         </div>
 
         <div>
-          <OwnImage
-            src={adjustedImageURL}
-            alt={`Imagem do produto: ${name}`}
-            responsive
-          />
+          {adjustedImageURL && (
+            <OwnImage
+              src={adjustedImageURL}
+              alt={`Imagem do produto: ${name}`}
+              responsive
+            />
+          )}
         </div>
 
         <div>

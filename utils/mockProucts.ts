@@ -6,6 +6,7 @@ const mockProducts: IProducts = {
   itemsPerPage: 0,
   totalItems: 0,
   items: [],
+  personalItems: [],
 };
 
 export default mockProducts;

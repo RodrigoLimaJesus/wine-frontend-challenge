@@ -41,7 +41,7 @@ const Shop: NextPage = () => {
       return;
     }
 
-    handleSearchOptions('price', min, max);
+    handleSearchOptions('price');
   }
 
   function handleProductClick(product: Item) {

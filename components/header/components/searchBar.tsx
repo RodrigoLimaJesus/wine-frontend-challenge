@@ -11,18 +11,21 @@ export default function SearchBar({ isHidden, setIsHidden }: Partial<ISideBarPro
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    if (searchInput.length > 0) {
-      const { minPrice, maxPrice } = priceRange;
+    const { minPrice, maxPrice } = priceRange;
 
+    if (searchInput.length > 0) {
       if (minPrice || maxPrice) {
         handleSearchOptions('namePrice');
       } else {
         handleSearchOptions('name');
       }
-
-      if (setIsHidden) {
-        setIsHidden(true);
+    } else {
+      if (minPrice || maxPrice) {
+        handleSearchOptions('price');
       }
+    }
+    if (setIsHidden) {
+      setIsHidden(true);
     }
   }
 

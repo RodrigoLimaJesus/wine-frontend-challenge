@@ -125,7 +125,8 @@ export default function AppProvider({ children }: IReactProps) {
 
     if (type === 'name' && (minPrice || maxPrice)) {
       setSearchType('namePrice');
-    } else if (type === 'price' && searchInput.length > 0) {
+    }
+    if (type === 'price' && searchInput.length > 0) {
       setSearchType('namePrice');
     } else {
       setSearchType(type);
