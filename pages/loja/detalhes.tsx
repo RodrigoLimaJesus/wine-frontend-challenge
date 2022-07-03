@@ -148,16 +148,16 @@ const Details: NextPage = () => {
 
           <div className="cart-button">
             <button
-              data-testid="increment-cart-btn"
+              data-testid="decrement-cart-btn"
               onClick={() => handleCartItems(productDetails, -1)}
             >
               <AiOutlineMinusCircle />
             </button>
-            <span>
+            <span data-testid="product-quantity-in-cart">
               {cartItems.find(({ id }) => id === productDetails.id)?.qtyInCart || 0}
             </span>
             <button
-              data-testid="decrement-cart-btn"
+              data-testid="increment-cart-btn"
               onClick={() => handleCartItems(productDetails, 1)}
             >
               <AiOutlinePlusCircle />

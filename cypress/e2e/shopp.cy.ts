@@ -103,7 +103,7 @@ describe('Testes para página Loja', () => {
     cy.get('span[data-testid=found-items]').contains('15');
   });
 
-  it.only('É possível filtrar os produtos por preço e nome', () => {
+  it('É possível filtrar os produtos por preço e nome', () => {
     cy.get('span[data-testid=found-items]').contains('62');
 
     cy.get('button[data-testid=header-search-button]').click();
