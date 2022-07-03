@@ -193,6 +193,7 @@ export default function AppProvider({ children }: IReactProps) {
         priceRange,
         setPriceRange,
         handleCartItems,
+        cartItems,
         countCartItems,
         productDetails,
         setProductDetails,

@@ -1,14 +1,14 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { AiFillStar } from 'react-icons/ai';
+import { AiFillStar, AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import styled from 'styled-components';
 import Layout from '../../components/layout';
 import OwnImage from '../../components/ownImage';
 import { useAppContext } from '../../contexts/appContenxt';
 
 const Details: NextPage = () => {
-  const { productDetails } = useAppContext();
+  const { productDetails, handleCartItems, cartItems } = useAppContext();
   const {
     name,
     flag,
@@ -82,7 +82,17 @@ const Details: NextPage = () => {
             <span>PREÇO NÃO-SÓCIO R$ {priceNonMember}</span>
           </div>
 
-          <button>Adicionar</button>
+          <div>
+            <button onClick={() => handleCartItems(productDetails, -1)}>
+              <AiOutlineMinusCircle />
+            </button>
+            <span>
+              {cartItems.find(({ id }) => id === productDetails.id)?.qtyInCart || 0}
+            </span>
+            <button onClick={() => handleCartItems(productDetails, 1)}>
+              <AiOutlinePlusCircle />
+            </button>
+          </div>
         </div>
       </MobileContainer>
 
@@ -136,7 +146,17 @@ const Details: NextPage = () => {
             <p>{sommelierComment}</p>
           </div>
 
-          <button className="cart-button">Adicionar</button>
+          <div className="cart-button">
+            <button onClick={() => handleCartItems(productDetails, -1)}>
+              <AiOutlineMinusCircle />
+            </button>
+            <span>
+              {cartItems.find(({ id }) => id === productDetails.id)?.qtyInCart || 0}
+            </span>
+            <button onClick={() => handleCartItems(productDetails, 1)}>
+              <AiOutlinePlusCircle />
+            </button>
+          </div>
         </div>
       </DesktopContainer>
     </Layout>
@@ -223,7 +243,7 @@ const MobileContainer = styled.div`
       font-size: 0.8rem;
     }
 
-    div {
+    div:nth-of-type(1) {
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -249,19 +269,32 @@ const MobileContainer = styled.div`
       }
     }
 
-    button {
+    div:nth-of-type(2) {
       background-color: rgb(126, 188, 67);
       color: rgb(245, 245, 245);
-      width: 40%;
+      width: 30%;
       font-size: 1rem;
       font-weight: 700;
-      padding: 15px 0;
+      padding: 10px 0;
       border-radius: 5px;
       transition: 0.4s;
-      align-self: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       :hover {
         background-color: rgb(101, 148, 57);
+      }
+
+      button {
+        display: flex;
+        align-items: center;
+        color: inherit;
+        font-size: 1.5rem;
+      }
+
+      span {
+        margin-inline: 10px;
       }
     }
   }
@@ -350,13 +383,26 @@ const DesktopContainer = styled.div`
         width: 40%;
         font-size: 1rem;
         font-weight: 700;
-        padding: 15px 0;
+        padding: 10px 0;
         border-radius: 5px;
         transition: 0.4s;
-        align-self: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
         :hover {
           background-color: rgb(101, 148, 57);
+        }
+
+        button {
+          display: flex;
+          align-items: center;
+          color: inherit;
+          font-size: 1.5rem;
+        }
+
+        span {
+          margin-inline: 10px;
         }
       }
     }

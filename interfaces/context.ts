@@ -17,6 +17,7 @@ export default interface IContext {
   priceRange: { minPrice: number; maxPrice: number };
   setPriceRange: Dispatch<SetStateAction<IPriceRange>>;
   handleCartItems: (item: Item, quantity: number) => void;
+  cartItems: Item[];
   countCartItems: number;
   productDetails: Item;
   setProductDetails: Dispatch<SetStateAction<Item>>;
