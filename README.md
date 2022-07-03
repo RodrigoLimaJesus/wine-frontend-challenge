@@ -8,28 +8,28 @@ Bem vindo(a) ao resultado do teste técnico do candidato @RodrigoLimaJesus para 
 
 - `git clone git@github.com:RodrigoLimaJesus/wine-frontend-challenge.git`
 
-2. Entre no diretório da aplicação.
+2. Entrar no diretório da aplicação.
 
 - `cd wine-frontend-challenge`
 
-3. Instale as dependências.
+3. Instalar as dependências.
 
 - `npm install`
 
-4. Coloque o projeto para rodar.
+4. Colocar o projeto para rodar.
 
 - `npm run dev`
 
 ### Obs: Caso queira rodar o projeto simulando o ambiente de produção, basta seguir os passos de 1 à 3 acima, mas também
 
 - Gerar uma build do seu projeto com: `npm run build`
-- Iniciar sua aplicação `npm start`
+- Iniciar sua aplicação com: `npm start`
 
 ## E os testes, como faz? Simples!
 
-Nesse projeto foi usado `cypress` para lidar com nossos testes `e2e`, e para rodar eles é bem simples. Você pode:
+Nesse projeto foi usado `cypress` para lidar com nossos testes `e2e`, e para rodar eles é bem simples, olha só:
 
-1. Precisamos garantir que nossa aplicalção está rodando, por isso lembre de rodar o comando `npm run dev` ou `npm run build` + `npm start` para que nosso servidor se inicie.
+1. Precisamos garantir que nossa aplicação está rodando, por isso lembre de rodar o comando `npm run dev` ou `npm run build` + `npm start` para que nosso servidor seja iniciado.
 
 2. Se quiser rodar os testes apenas no terminal, o que vai consumir menos do seu processador, pode contar com o comando: `npm run cy`
 
