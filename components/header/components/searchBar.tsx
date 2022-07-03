@@ -6,21 +6,32 @@ import ISideBarProps from '../../../interfaces/sideBarProps';
 import IStyleProps from '../../../interfaces/styleProps';
 
 export default function SearchBar({ isHidden, setIsHidden }: Partial<ISideBarProps>) {
-  const { searchInput, setSearchInput, handleSearchOptions } = useAppContext();
+  const { searchInput, setSearchInput, handleSearchOptions, priceRange } =
+    useAppContext();
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (searchInput.length > 0) {
+      const { minPrice, maxPrice } = priceRange;
 
-    handleSearchOptions('name');
+      if (minPrice || maxPrice) {
+        handleSearchOptions('namePrice');
+      } else {
+        handleSearchOptions('name');
+      }
 
-    if (setIsHidden) {
-      setIsHidden(true);
+      if (setIsHidden) {
+        setIsHidden(true);
+      }
     }
   }
 
   function handleInputChange(e: ChangeEvent<HTMLInputElement>) {
     const inputContent = e.target.value;
-    setSearchInput(inputContent);
+
+    if (inputContent !== ' ') {
+      setSearchInput(inputContent);
+    }
   }
 
   return (
@@ -44,7 +55,7 @@ const SearchBarComponent = styled.form<IStyleProps>`
   visibility: ${(props) => (props.hidden ? 'hidden' : 'visible')};
   justify-content: space-between;
   align-items: center;
-  position: fixed;
+  position: absolute;
   background-color: rgb(245, 245, 245);
   width: 100vw;
   top: 80px;

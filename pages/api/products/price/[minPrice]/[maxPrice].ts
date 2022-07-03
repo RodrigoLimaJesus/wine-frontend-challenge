@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import IProducts from '../../../../../interfaces/products';
 import fetcher from '../../../../../services/fetcher';
+import filterByPrice from '../../../../../utils/filterByPrice';
 import groupItems from '../../../../../utils/groupItems';
 import mockProducts from '../../../../../utils/mockProucts';
 
@@ -18,22 +19,14 @@ export default async function GetAllProducts(
       'https://wine-back-test.herokuapp.com/products',
     );
 
-    const filredItems = allProducts.items.filter(({ price }) => {
-      if (numMinPrice !== 0 && numMaxPrice === 0) {
-        return price >= numMinPrice;
-      } else if (numMinPrice === 0 && numMaxPrice !== 0) {
-        return price <= numMaxPrice;
-      } else {
-        return price >= numMinPrice && price <= numMaxPrice;
-      }
-    });
+    const filtredItems = filterByPrice(allProducts, numMinPrice, numMaxPrice);
 
-    const personalItems = groupItems(filredItems);
+    const personalItems = groupItems(filtredItems);
 
     return res.status(200).json({
       ...allProducts,
       totalPages: personalItems.length,
-      totalItems: filredItems.length,
+      totalItems: filtredItems.length,
       items: [],
       personalItems,
     });

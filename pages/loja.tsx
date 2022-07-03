@@ -13,25 +13,30 @@ const Shop: NextPage = () => {
     currentPage,
     setPriceRange,
     handleSearchOptions,
+    searchInput,
   } = useAppContext();
   const numberCurrPage = Number(currentPage);
   const priceFilters = [
     { id: useId(), label: 'Todos', min: 0, max: 0 },
     { id: useId(), label: 'Até R$40', min: 0, max: 40 },
-    { id: useId(), label: 'R$40 a R$60', min: 0, max: 40 },
+    { id: useId(), label: 'R$40 a R$60', min: 40, max: 60 },
     { id: useId(), label: 'R$60 a R$200', min: 60, max: 200 },
     { id: useId(), label: 'R$200 a R$500', min: 200, max: 500 },
     { id: useId(), label: 'Acima de R$500', min: 500, max: 0 },
   ];
 
   function handleFilterPrice(min: number, max: number) {
+    setPriceRange({ minPrice: min, maxPrice: max });
     if (min === 0 && max === 0) {
-      handleSearchOptions('page');
+      if (searchInput.length > 0) {
+        handleSearchOptions('name', min, max);
+      } else {
+        handleSearchOptions('page');
+      }
       return;
     }
 
-    setPriceRange({ minPrice: min, maxPrice: max });
-    handleSearchOptions('price');
+    handleSearchOptions('price', min, max);
   }
 
   return (

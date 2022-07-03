@@ -47,6 +47,12 @@ export default function AppProvider({ children }: IReactProps) {
           const { minPrice, maxPrice } = priceRange;
           return fetcher(`/api/products/price/${minPrice}/${maxPrice}`);
         },
+        namePrice: async () => {
+          const { minPrice, maxPrice } = priceRange;
+          return fetcher(
+            `/api/products/name-price/${searchInput}/${minPrice}/${maxPrice}`,
+          );
+        },
       };
 
       const existentOption = searchOptions[searchType as keyof typeof searchOptions];
@@ -54,7 +60,6 @@ export default function AppProvider({ children }: IReactProps) {
       if (existentOption) {
         try {
           fetchProducts = await existentOption();
-          console.log(fetchProducts);
         } catch (error) {
           fetchProducts = await fetcher(`/api/products/page/1`);
         }
@@ -107,9 +112,21 @@ export default function AppProvider({ children }: IReactProps) {
     }
   }
 
-  function handleSearchOptions(type: 'page' | 'name' | 'price') {
+  function handleSearchOptions(
+    type: 'page' | 'name' | 'price' | 'namePrice',
+    minPrice?: number,
+    maxPrice?: number,
+  ) {
     setCurrentPage(1);
-    setSearchType(type);
+
+    if (type === 'name' && (minPrice || maxPrice)) {
+      setSearchType('namePrice');
+    } else if (type === 'price' && searchInput.length > 0) {
+      setSearchType('namePrice');
+    } else {
+      setSearchType(type);
+    }
+
     setCanSearch(true);
   }
 
@@ -124,6 +141,7 @@ export default function AppProvider({ children }: IReactProps) {
         currentPage,
         searchInput,
         setSearchInput,
+        priceRange,
         setPriceRange,
       }}
     >
