@@ -22,7 +22,6 @@ export default function Layout({ children }: IReactProps) {
 }
 
 const Main = styled.main`
-  background-color: rgb(245, 245, 245);
   overflow-x: hidden;
   padding: 20px;
 `;
@@ -35,6 +34,10 @@ const GlobalStyle = createGlobalStyle`
   font-family: sans-serif;
   border: none;
   background: none;
+  }
+
+  body {
+    background-color: rgb(245, 245, 245);
   }
 
   button:hover {
