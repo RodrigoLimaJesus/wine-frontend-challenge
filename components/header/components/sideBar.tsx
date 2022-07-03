@@ -138,7 +138,7 @@ const WrapProfile = styled.div`
     margin-left: 5px;
 
     button {
-      color: rgb(184, 67, 110);
+      color: rgb(200, 26, 120);
       font-weight: 700;
       font-size: 0.8rem;
       margin-top: 5px;
@@ -167,18 +167,18 @@ const NavBar = styled.nav`
 `;
 
 const NavLink = styled.button<IStyleProps>`
-  color: ${(props) => (props.active ? 'rgb(184, 67, 110)' : 'rgb(0, 0, 0)')};
+  color: ${(props) => (props.active ? 'rgb(200, 26, 120)' : 'rgb(0, 0, 0)')};
   margin: 10px;
   font-weight: 700;
   font-size: 1.2rem;
   transition: 0.4s;
 
   @media screen and (min-width: 790px) {
-    color: ${(props) => (props.active ? 'rgb(184, 67, 110)' : 'rgb(100, 100, 100)')};
+    color: ${(props) => (props.active ? 'rgb(200, 26, 120)' : 'rgb(100, 100, 100)')};
     height: 100%;
     :hover {
-      color: rgb(184, 67, 110);
-      border-bottom: solid 1px rgb(184, 67, 110);
+      color: rgb(200, 26, 120);
+      border-bottom: solid 1px rgb(200, 26, 120);
     }
   }
 `;

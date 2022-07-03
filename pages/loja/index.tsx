@@ -304,7 +304,7 @@ const ProductCard = styled.div`
     span:nth-of-type(2) {
       display: flex;
       align-items: baseline;
-      color: rgb(184, 67, 110);
+      color: rgb(200, 26, 120);
       font-size: 0.7rem;
       font-weight: 700;
 
@@ -381,7 +381,7 @@ const ProductButton = styled.button`
 `;
 
 const ProductDetailsButton = styled.button`
-  color: rgb(184, 67, 110);
+  color: rgb(200, 26, 120);
   font-size: 0.9rem;
 
   @media screen and (min-width: 1024px) {
@@ -397,8 +397,8 @@ const PaginationMobile = styled.div`
   text-align: center;
 
   button {
-    color: rgb(184, 67, 110);
-    border: 2px solid rgb(184, 67, 110);
+    color: rgb(200, 26, 120);
+    border: 2px solid rgb(200, 26, 120);
     border-radius: 10px;
     width: 50%;
     font-size: 1.4rem;
@@ -441,10 +441,10 @@ const PaginationButton = styled.button<IStyleProps>`
   font-size: 1.4rem;
   margin-inline: 5px;
   padding: 10px;
-  border: 1px solid rgb(184, 67, 110);
+  border: 1px solid rgb(200, 26, 120);
   border-radius: 10px;
-  color: ${(props) => (props.active ? 'rgb(245,245,245)' : 'rgb(184, 67, 110)')};
-  background-color: ${(props) => (props.active ? 'rgb(184, 67, 110)' : 'transparent')};
+  color: ${(props) => (props.active ? 'rgb(245,245,245)' : 'rgb(200, 26, 120)')};
+  background-color: ${(props) => (props.active ? 'rgb(200, 26, 120)' : 'transparent')};
 `;
 
 const PaginationText = styled(PaginationButton)`

@@ -78,7 +78,7 @@ const SearchBarComponent = styled.form<IStyleProps>`
 
   button {
     font-size: 1.7rem;
-    color: rgb(184, 67, 110);
+    color: rgb(200, 26, 120);
   }
 
   @media screen and (min-width: 790px) {
