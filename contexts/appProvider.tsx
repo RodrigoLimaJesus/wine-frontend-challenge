@@ -16,6 +16,7 @@ export default function AppProvider({ children }: IReactProps) {
   const [isMounted, setIsMounted] = useState(false);
   const [cartItems, setCartItems] = useState([] as Item[]);
   const [countCartItems, setCountCartItems] = useState(0);
+  const [productDetails, setProductDetails] = useState({} as Item);
 
   useEffect(() => {
     function updateProductsInfo(fetchProducts: IProducts) {
@@ -161,7 +162,7 @@ export default function AppProvider({ children }: IReactProps) {
       numberInCart = productInCart.qtyInCart || 0;
     }
 
-    if (!numberInCart || numberInCart + quantity === 0) {
+    if (!numberInCart || numberInCart + quantity === 0 || quantity === 0) {
       setCartItems((prev) => prev.filter(({ id }) => id !== item.id));
       return;
     }
@@ -192,6 +193,8 @@ export default function AppProvider({ children }: IReactProps) {
         setPriceRange,
         handleCartItems,
         countCartItems,
+        productDetails,
+        setProductDetails,
       }}
     >
       {children}

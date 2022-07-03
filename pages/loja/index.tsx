@@ -1,10 +1,12 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import { useId } from 'react';
 import styled from 'styled-components';
-import Layout from '../components/layout';
-import OwnImage from '../components/ownImage';
-import { useAppContext } from '../contexts/appContenxt';
-import IStyleProps from '../interfaces/styleProps';
+import Layout from '../../components/layout';
+import OwnImage from '../../components/ownImage';
+import { useAppContext } from '../../contexts/appContenxt';
+import { Item } from '../../interfaces/products';
+import IStyleProps from '../../interfaces/styleProps';
 
 const Shop: NextPage = () => {
   const {
@@ -15,8 +17,9 @@ const Shop: NextPage = () => {
     handleSearchOptions,
     searchInput,
     handleCartItems,
+    setProductDetails,
   } = useAppContext();
-
+  const router = useRouter();
   const numberCurrPage = Number(currentPage);
   const priceFilters = [
     { id: useId(), label: 'Todos', min: 0, max: 0 },
@@ -39,6 +42,11 @@ const Shop: NextPage = () => {
     }
 
     handleSearchOptions('price', min, max);
+  }
+
+  function handleProductClick(product: Item) {
+    setProductDetails(product);
+    router.push('/loja/detalhes');
   }
 
   return (
@@ -90,9 +98,10 @@ const Shop: NextPage = () => {
                 <ProductButton onClick={() => handleCartItems(product, 1)}>
                   Adicionar
                 </ProductButton>
-                <ProductButton onClick={() => handleCartItems(product, -1)}>
-                  Remover
-                </ProductButton>
+
+                <ProductDetailsButton onClick={() => handleProductClick(product)}>
+                  Ver detalhes
+                </ProductDetailsButton>
               </ProductCard>
             ))}
           </ProductsList>
@@ -368,6 +377,15 @@ const ProductButton = styled.button`
 
   :hover {
     background-color: rgb(101, 148, 57);
+  }
+`;
+
+const ProductDetailsButton = styled.button`
+  color: rgb(184, 67, 110);
+  font-size: 0.9rem;
+
+  @media screen and (min-width: 1024px) {
+    font-size: 1rem;
   }
 `;
 

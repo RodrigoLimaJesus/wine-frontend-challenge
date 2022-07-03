@@ -57,7 +57,7 @@ export default function SideBar({ isHidden, setIsHidden }: ISideBarProps) {
               setIsHidden(true);
               router.push(navLink.route);
             }}
-            active={router.pathname === navLink.route}
+            active={router.pathname.includes(navLink.route)}
           >
             {navLink.name}
           </NavLink>

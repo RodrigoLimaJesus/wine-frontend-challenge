@@ -18,4 +18,6 @@ export default interface IContext {
   setPriceRange: Dispatch<SetStateAction<IPriceRange>>;
   handleCartItems: (item: Item, quantity: number) => void;
   countCartItems: number;
+  productDetails: Item;
+  setProductDetails: Dispatch<SetStateAction<Item>>;
 }
