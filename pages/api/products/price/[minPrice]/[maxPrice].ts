@@ -10,14 +10,23 @@ export default async function GetAllProducts(
 ) {
   try {
     const { minPrice, maxPrice } = req.query;
+
+    const numMinPrice = Number(minPrice);
+    const numMaxPrice = Number(maxPrice);
+
     const allProducts: IProducts = await fetcher(
       'https://wine-back-test.herokuapp.com/products',
     );
 
-    const filredItems = allProducts.items.filter(
-      ({ priceMember }) =>
-        priceMember >= Number(minPrice) && priceMember <= Number(maxPrice),
-    );
+    const filredItems = allProducts.items.filter(({ price }) => {
+      if (numMinPrice !== 0 && numMaxPrice === 0) {
+        return price >= numMinPrice;
+      } else if (numMinPrice === 0 && numMaxPrice !== 0) {
+        return price <= numMaxPrice;
+      } else {
+        return price >= numMinPrice && price <= numMaxPrice;
+      }
+    });
 
     const personalItems = groupItems(filredItems);
 

@@ -55,7 +55,7 @@ const SearchBarComponent = styled.form<IStyleProps>`
   input {
     background-color: rgb(255, 255, 255);
     padding: 8px;
-    margin-right: 20px;
+    margin-inline: 20px;
     font-size: 1rem;
     border-radius: 10px;
     width: 100%;

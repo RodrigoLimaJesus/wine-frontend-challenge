@@ -23,9 +23,7 @@ export default function Layout({ children }: IReactProps) {
 
 const Main = styled.main`
   background-color: rgb(245, 245, 245);
-  height: 100vh;
   overflow-x: hidden;
-  overflow-y: auto;
   padding: 20px;
 `;
 
@@ -39,9 +37,7 @@ const GlobalStyle = createGlobalStyle`
   background: none;
   }
 
-  @media screen and (min-width: 790px) {
-    button:hover {
-      cursor: pointer;
-    }
+  button:hover {
+    cursor: pointer;
   }
 `;

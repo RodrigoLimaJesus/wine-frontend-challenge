@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import { useId } from 'react';
 import styled from 'styled-components';
 import Layout from '../components/layout';
 import OwnImage from '../components/ownImage';
@@ -6,8 +7,32 @@ import { useAppContext } from '../contexts/appContenxt';
 import IStyleProps from '../interfaces/styleProps';
 
 const Shop: NextPage = () => {
-  const { productsInfo, handlePagination, currentPage } = useAppContext();
+  const {
+    productsInfo,
+    handlePagination,
+    currentPage,
+    setPriceRange,
+    handleSearchOptions,
+  } = useAppContext();
   const numberCurrPage = Number(currentPage);
+  const priceFilters = [
+    { id: useId(), label: 'Todos', min: 0, max: 0 },
+    { id: useId(), label: 'Até R$40', min: 0, max: 40 },
+    { id: useId(), label: 'R$40 a R$60', min: 0, max: 40 },
+    { id: useId(), label: 'R$60 a R$200', min: 60, max: 200 },
+    { id: useId(), label: 'R$200 a R$500', min: 200, max: 500 },
+    { id: useId(), label: 'Acima de R$500', min: 500, max: 0 },
+  ];
+
+  function handleFilterPrice(min: number, max: number) {
+    if (min === 0 && max === 0) {
+      handleSearchOptions('page');
+      return;
+    }
+
+    setPriceRange({ minPrice: min, maxPrice: max });
+    handleSearchOptions('price');
+  }
 
   return (
     <Layout>
@@ -15,118 +40,136 @@ const Shop: NextPage = () => {
         <span>{productsInfo?.totalItems} </span>
         <span>produtos encontrados</span>
       </CountProducts>
+      <MainContainer>
+        <PriceFilterContainer>
+          <span>Refine sua busca</span>
+          <span>Por preço</span>
 
-      <ProductsList>
-        {productsInfo?.items?.map((product) => (
-          <ProductCard key={product.id}>
+          {priceFilters.map(({ id, label, min, max }) => (
+            <label key={id}>
+              <input
+                type="radio"
+                name="price-filter"
+                onChange={() => handleFilterPrice(min, max)}
+              />
+              {label}
+            </label>
+          ))}
+        </PriceFilterContainer>
+        <div>
+          <ProductsList>
+            {productsInfo?.items?.map((product) => (
+              <ProductCard key={product.id}>
+                <div>
+                  <OwnImage src={product.image} alt={product.name} />
+                </div>
+
+                <h4>{product.name}</h4>
+
+                <div>
+                  <span>{product.price} </span>
+                  <span>{product.discount}% OFF</span>
+                </div>
+
+                <div>
+                  <span>SÓCIO WINE</span>
+                  <span>
+                    R$ <span>{product.priceMember}</span>
+                  </span>
+                </div>
+
+                <span>NÃO SÓCIO R${product.priceNonMember}</span>
+
+                <ProductButton>Adicionar</ProductButton>
+              </ProductCard>
+            ))}
+          </ProductsList>
+
+          <PaginationMobile>
+            <button
+              disabled={currentPage >= Number(productsInfo?.totalPages)}
+              onClick={() => {
+                if (handlePagination) {
+                  handlePagination(true, currentPage + 1);
+                }
+              }}
+            >
+              Mostrar mais
+            </button>
+
             <div>
-              <OwnImage src={product.image} alt={product.name} />
-            </div>
-
-            <h4>{product.name}</h4>
-
-            <div>
-              <span>{product.price} </span>
-              <span>{product.discount}% OFF</span>
-            </div>
-
-            <div>
-              <span>SÓCIO WINE</span>
               <span>
-                R$ <span>{product.priceMember}</span>
+                Exibindo <span>{productsInfo?.items?.length}</span> de
+                <span> {productsInfo?.totalItems} </span>
+                produtos no total
               </span>
             </div>
+          </PaginationMobile>
 
-            <span>NÃO SÓCIO R${product.priceNonMember}</span>
+          <PaginationDesktop>
+            {numberCurrPage - 1 > 0 && (
+              <>
+                <PaginationText
+                  active={false}
+                  onClick={() => {
+                    if (handlePagination) {
+                      handlePagination(false, numberCurrPage - 1);
+                    }
+                  }}
+                >
+                  {'<<'} Anterior
+                </PaginationText>
+                <PaginationButton
+                  active={false}
+                  onClick={() => {
+                    if (handlePagination) {
+                      handlePagination(false, numberCurrPage - 1);
+                    }
+                  }}
+                >
+                  {numberCurrPage - 1}
+                </PaginationButton>
+              </>
+            )}
 
-            <ProductButton>Adicionar</ProductButton>
-          </ProductCard>
-        ))}
-      </ProductsList>
+            <PaginationButton
+              active
+              onClick={() => {
+                if (handlePagination) {
+                  handlePagination(false, numberCurrPage);
+                }
+              }}
+            >
+              {numberCurrPage}
+            </PaginationButton>
 
-      <PaginationMobile>
-        <button
-          disabled={currentPage >= Number(productsInfo?.totalPages)}
-          onClick={() => {
-            if (handlePagination) {
-              handlePagination(true, currentPage + 1);
-            }
-          }}
-        >
-          Mostrar mais
-        </button>
-
-        <div>
-          <span>
-            Exibindo <span>{productsInfo?.items?.length}</span> de
-            <span> {productsInfo?.totalItems} </span>
-            produtos no total
-          </span>
+            {productsInfo?.totalPages && numberCurrPage + 1 <= productsInfo?.totalPages && (
+              <>
+                <PaginationButton
+                  active={false}
+                  onClick={() => {
+                    if (handlePagination) {
+                      handlePagination(false, numberCurrPage + 1);
+                    }
+                  }}
+                >
+                  {numberCurrPage + 1}
+                </PaginationButton>
+                <PaginationText
+                  active={false}
+                  onClick={() => {
+                    if (handlePagination) {
+                      handlePagination(false, numberCurrPage + 1);
+                    }
+                  }}
+                >
+                  Próximo {'>>'}
+                </PaginationText>
+              </>
+            )}
+          </PaginationDesktop>
         </div>
-      </PaginationMobile>
-
-      <PaginationDesktop>
-        {numberCurrPage - 1 > 0 && (
-          <>
-            <PaginationText
-              active={false}
-              onClick={() => {
-                if (handlePagination) {
-                  handlePagination(false, numberCurrPage - 1);
-                }
-              }}
-            >
-              {'<<'} Anterior
-            </PaginationText>
-            <PaginationButton
-              active={false}
-              onClick={() => {
-                if (handlePagination) {
-                  handlePagination(false, numberCurrPage - 1);
-                }
-              }}
-            >
-              {numberCurrPage - 1}
-            </PaginationButton>
-          </>
-        )}
-
-        <PaginationButton
-          active
-          onClick={() => {
-            if (handlePagination) {
-              handlePagination(false, numberCurrPage);
-            }
-          }}
-        >
-          {numberCurrPage}
-        </PaginationButton>
-
-        {productsInfo?.totalPages && numberCurrPage + 1 <= productsInfo?.totalPages && (
-          <>
-            <PaginationButton
-              active={false}
-              onClick={() => {
-                if (handlePagination) {
-                  handlePagination(false, numberCurrPage + 1);
-                }
-              }}
-            >
-              {numberCurrPage + 1}
-            </PaginationButton>
-            <PaginationText
-              active={false}
-              onClick={() => {
-                if (handlePagination) {
-                  handlePagination(false, numberCurrPage + 1);
-                }
-              }}
-            >
-              Próximo {'>>'}
-            </PaginationText>
-          </>
-        )}
-      </PaginationDesktop>
+      </MainContainer>
     </Layout>
   );
 };
@@ -143,6 +186,36 @@ const CountProducts = styled.div`
 
   span:nth-child(2) {
     color: rgb(80, 80, 80);
+  }
+`;
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  @media screen and (min-width: 790px) {
+    flex-direction: row;
+  }
+`;
+
+const PriceFilterContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 15px;
+  min-width: 220px;
+
+  span:nth-of-type(1) {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+
+  span:nth-of-type(2) {
+    margin-block: 10px;
+  }
+
+  input {
+    margin-right: 5px;
+    margin-block: 5px;
   }
 `;
 

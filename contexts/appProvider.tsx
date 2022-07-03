@@ -10,7 +10,7 @@ export default function AppProvider({ children }: IReactProps) {
   const [searchType, setSearchType] = useState('');
   const [searchInput, setSearchInput] = useState('');
   const [isMobile, setIsMobile] = useState(false);
-  const [priceRange, setPriceRange] = useState<Partial<IPriceRange>>({});
+  const [priceRange, setPriceRange] = useState<IPriceRange>({} as IPriceRange);
   const [currentPage, setCurrentPage] = useState(1);
   const [canSearch, setCanSearch] = useState(true);
 
@@ -54,6 +54,7 @@ export default function AppProvider({ children }: IReactProps) {
       if (existentOption) {
         try {
           fetchProducts = await existentOption();
+          console.log(fetchProducts);
         } catch (error) {
           fetchProducts = await fetcher(`/api/products/page/1`);
         }
@@ -106,7 +107,7 @@ export default function AppProvider({ children }: IReactProps) {
     }
   }
 
-  function handleSearchOptions(type: string) {
+  function handleSearchOptions(type: 'page' | 'name' | 'price') {
     setCurrentPage(1);
     setSearchType(type);
     setCanSearch(true);
@@ -123,6 +124,7 @@ export default function AppProvider({ children }: IReactProps) {
         currentPage,
         searchInput,
         setSearchInput,
+        setPriceRange,
       }}
     >
       {children}
