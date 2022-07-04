@@ -1,6 +1,6 @@
 # Wine - O maior clube de vinhos do mundo!
 
-Bem vindo(a) ao resultado do teste técnico do candidato @RodrigoLimaJesus para empresa WINE. Para ver o deploy o app, [basta clicar aqui!]('https://wine-rodrigolimajesus.vercel.app/')
+Bem vindo(a) ao resultado do teste técnico do candidato @RodrigoLimaJesus para empresa WINE. Para ver o deploy o app, [basta clicar aqui]('https://wine-rodrigolimajesus.vercel.app/').
 
 ## Para rodar a aplicação na sua máquina basta
 
